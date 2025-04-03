@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+
 /**
  * <p>
  * 
@@ -22,34 +23,36 @@ import java.io.Serializable;
 @TableName("cloud_product")
 public class CloudProduct implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+	@TableId(value = "id", type = IdType.AUTO)
+	private Integer id;
 
-    /**
-     * 名称
-     */
-    private String name;
+	/**
+	 * 名称
+	 */
+	private String name;
 
-    /**
-     * 天数
-     */
-    private Integer days;
+	/**
+	 * 天数
+	 */
+	private Integer days;
 
-    private Integer maxNum;
+	private Integer maxNum;
 
-    /**
-     * 利息
-     */
-    private String rate;
+	/**
+	 * 利息
+	 */
+	private String rate;
 
-    private Integer minNum;
+	private Integer minNum;
 
-    /**
-     * 描述
-     */
-    private String info;
+	private Integer orderNum;
 
-    private String icon;
+	/**
+	 * 描述
+	 */
+	private String info;
+
+	private String icon;
 }

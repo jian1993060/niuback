@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.math3.ode.SecondOrderDifferentialEquations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,9 +18,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import cn.jian.stback.bo.UserBO;
 import cn.jian.stback.bo.UserPO;
+import cn.jian.stback.bo.UserVO;
 import cn.jian.stback.bo.WinType;
 import cn.jian.stback.common.R;
+import cn.jian.stback.entity.CloudOrder;
+import cn.jian.stback.entity.SecondOrder;
 import cn.jian.stback.entity.User;
+import cn.jian.stback.entity.UserOrder;
+import cn.jian.stback.entity.UserWallet;
+import cn.jian.stback.service.CloudOrderService;
+import cn.jian.stback.service.SecondOrderService;
+import cn.jian.stback.service.UserOrderService;
 import cn.jian.stback.service.UserService;
 import cn.jian.stback.service.UserWalletService;
 
@@ -40,12 +50,48 @@ public class UserController {
 	@Autowired
 	UserWalletService walletService;
 
+	@Autowired
+	UserOrderService userOrderService;
+
+	@Autowired
+	SecondOrderService secondOrderService;
+
+	@Autowired
+	CloudOrderService cloudOrderService;
+
 	/**
 	 * 查询用户
 	 */
 	@RequestMapping("list")
 	public R List(@RequestBody UserPO user) {
 		return R.success(getList(user));
+	}
+
+	@RequestMapping("detail/{id}")
+	public R detail(@PathVariable Integer id) {
+		QueryWrapper<UserWallet> w = new QueryWrapper<UserWallet>();
+		w.eq("user_id", id);
+		List<UserWallet> wallets = walletService.list(w);
+
+		QueryWrapper<UserOrder> u = new QueryWrapper<UserOrder>();
+		u.eq("user_id", id).orderByDesc("create_time");
+		List<UserOrder> userOrders = userOrderService.list(u);
+
+		QueryWrapper<SecondOrder> s = new QueryWrapper<SecondOrder>();
+		s.eq("user_id", id).orderByDesc("create_time");
+		List<SecondOrder> secondOrders = secondOrderService.list(s);
+		
+		QueryWrapper<CloudOrder> c = new QueryWrapper<CloudOrder>();
+		c.eq("user_id", id).orderByDesc("create_time");
+		List<CloudOrder> cloudOrders = cloudOrderService.list(c);
+		User user = userService.getById(id);
+		UserVO vo = new UserVO();
+		vo.setTradeOrders(userOrders);
+		vo.setSecondOrders(secondOrders);
+		vo.setWallets(wallets);
+		vo.setCloudOrders(cloudOrders);
+		vo.setUser(user);
+		return R.success(vo);
 	}
 
 	@RequestMapping("update")
