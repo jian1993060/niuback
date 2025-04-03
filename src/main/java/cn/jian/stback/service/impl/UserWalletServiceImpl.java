@@ -33,9 +33,9 @@ public class UserWalletServiceImpl extends ServiceImpl<UserWalletMapper, UserWal
 	WalletLogService walletLogService;
 
 	@Override
-	public UserWallet getAmount(String type, String code,Integer userId) {
+	public UserWallet getAmount(String type, String name, Integer userId) {
 		QueryWrapper<UserWallet> q = new QueryWrapper<>();
-		q.eq("user_id", userId).eq("code", code).eq("type", type);
+		q.eq("user_id", userId).eq("name", name).eq("type", type);
 		UserWallet wallet = getOne(q);
 		return wallet;
 	}
@@ -53,7 +53,7 @@ public class UserWalletServiceImpl extends ServiceImpl<UserWalletMapper, UserWal
 			afterAmount = beforAmount.subtract(amount);
 			info = "-" + amount;
 		}
-		if(afterAmount.compareTo(BigDecimal.ZERO)<0) {
+		if (afterAmount.compareTo(BigDecimal.ZERO) < 0) {
 			throw new ZjException("system error");
 		}
 		wallet.setAmount(afterAmount);
@@ -61,7 +61,7 @@ public class UserWalletServiceImpl extends ServiceImpl<UserWalletMapper, UserWal
 		WalletLog log = new WalletLog();
 		log.setAfterAmount(afterAmount);
 		log.setBeforeAmount(beforAmount);
-		log.setName(wallet.getCode());
+		log.setName(wallet.getName());
 		log.setCreateTime(LocalDateTime.now());
 		log.setTransResult(info);
 		log.setType(trans.name());

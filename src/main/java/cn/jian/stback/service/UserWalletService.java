@@ -20,7 +20,7 @@ import cn.jian.stback.entity.UserWallet;
  */
 public interface UserWalletService extends IService<UserWallet> {
 
-	public UserWallet getAmount(String type, String code,Integer userId);
+	public UserWallet getAmount(String type, String name,Integer userId);
 
 	// 修改用户钱包并且记录操作日志 采用version乐观锁防止并发错误
 	public void updateAmount(UserWallet wallet, TransType trans, ActionType aciton, BigDecimal amount);

@@ -9,6 +9,7 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
 /**
  * <p>
  * 
@@ -22,30 +23,32 @@ import java.time.LocalDateTime;
 @ToString
 public class Recharge implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+	@TableId(value = "id", type = IdType.AUTO)
+	private Integer id;
 
-    private LocalDateTime createTime;
+	private LocalDateTime createTime;
 
-    private BigDecimal amount;
+	private BigDecimal amount;
 
-    /**
-     * bsc erc20 trx bitcoin
-     */
-    private String chainType;
+	/**
+	 * bsc erc20 trx bitcoin
+	 */
+	private String chainType;
 
-    private String address;
+	private String address;
 
-    private Integer userId;
+	private Integer userId;
 
-    /**
-     * 审核状态
-     */
-    private String status;
+	/**
+	 * 审核状态
+	 */
+	private String status;
 
-    private String img;
+	private String img;
 
-    private String name;
+	private String name;
+
+	private String info;
 }
