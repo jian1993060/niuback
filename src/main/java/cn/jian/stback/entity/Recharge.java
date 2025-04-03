@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author jian
- * @since 2025-03-30
+ * @since 2025-04-03
  */
 @Getter
 @Setter
@@ -40,12 +40,12 @@ public class Recharge implements Serializable {
 
     private Integer userId;
 
-    private String coinType;
-
     /**
      * 审核状态
      */
     private String status;
 
     private String img;
+
+    private String name;
 }

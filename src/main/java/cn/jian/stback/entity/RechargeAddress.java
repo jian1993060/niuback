@@ -12,7 +12,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author jian
- * @since 2025-03-30
+ * @since 2025-04-03
  */
 @Getter
 @Setter
@@ -26,7 +26,7 @@ public class RechargeAddress implements Serializable {
 
     private String address;
 
-    private String coinType;
+    private String coinName;
 
     private String icon;
 

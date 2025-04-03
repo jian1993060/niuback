@@ -12,7 +12,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author jian
- * @since 2025-03-30
+ * @since 2025-04-03
  */
 @Getter
 @Setter
@@ -29,4 +29,6 @@ public class StockData implements Serializable {
     private String type;
 
     private String status;
+
+    private Integer orderNum;
 }

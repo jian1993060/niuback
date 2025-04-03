@@ -2,6 +2,7 @@ package cn.jian.stback.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +11,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import cn.jian.stback.bo.UserPO;
+import cn.jian.stback.bo.VerifyBO;
 import cn.jian.stback.common.R;
 import cn.jian.stback.entity.Recharge;
 import cn.jian.stback.entity.StockData;
@@ -35,11 +37,19 @@ public class RechargeController {
 	public R List(@RequestBody UserPO user) {
 		return R.success(getList(user));
 	}
+	
+	@RequestMapping("verify")
+	public R List(@RequestBody @Validated VerifyBO bo) {
+		return R.success();
+	}
 
 	public Page<Recharge> getList(UserPO po) {
 		QueryWrapper<Recharge> wrapper = new QueryWrapper<Recharge>();
 		if (StringUtils.isNotBlank(po.getUserId())) {
 			wrapper.eq("user_id", po.getUserId());
+		}
+		if (StringUtils.isNotBlank(po.getStatus())) {
+			wrapper.eq("status", po.getStatus());
 		}
 		if (po.getStartDate() != null) {
 			wrapper.ge("create_time", po.getStartDate().atStartOfDay());

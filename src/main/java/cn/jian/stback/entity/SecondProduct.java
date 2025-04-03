@@ -9,13 +9,14 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+
 /**
  * <p>
  * 
  * </p>
  *
  * @author jian
- * @since 2025-03-30
+ * @since 2025-04-03
  */
 @Getter
 @Setter
@@ -23,20 +24,20 @@ import java.math.BigDecimal;
 @TableName("second_product")
 public class SecondProduct implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+	@TableId(value = "id", type = IdType.AUTO)
+	private Integer id;
 
-    private Integer times;
+	private Integer times;
 
-    private Double rate;
+	private Double rate;
 
-    private BigDecimal minAmount;
+	private BigDecimal minAmount;
 
-    private BigDecimal maxAmount;
+	private BigDecimal maxAmount;
 
-    private Double tradeRate;
+	private Double tradeRate;
 
-    private Integer orderNum;
+	private int orderNum;
 }

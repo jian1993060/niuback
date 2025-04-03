@@ -19,6 +19,8 @@ public class UserPO {
 
 	String real;
 	
+	String type;
+	
 	String userId;
 	
 	String status;

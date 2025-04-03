@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author jian
- * @since 2025-03-30
+ * @since 2025-04-03
  */
 @Getter
 @Setter
@@ -39,7 +39,7 @@ public class WalletLog implements Serializable {
 
     private BigDecimal afterAmount;
 
-    private String code;
+    private String name;
 
     private String transResult;
 

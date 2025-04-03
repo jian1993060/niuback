@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author jian
- * @since 2025-03-30
+ * @since 2025-04-03
  */
 @Getter
 @Setter
@@ -33,9 +33,9 @@ public class SecondOrder implements Serializable {
 
     private BigDecimal price;
 
-    private String code;
+    private String name;
 
-    private String rateAmount;
+    private Double tradeRate;
 
     /**
      * 30 60 120
@@ -43,12 +43,22 @@ public class SecondOrder implements Serializable {
     private Integer type;
 
     /**
-     * 买入数量
+     * 买入金额
      */
-    private BigDecimal num;
+    private BigDecimal buyAmount;
 
     /**
      * 平仓价格
      */
     private BigDecimal finalPrice;
+
+    private Integer userId;
+
+    private String status;
+
+    private String orderType;
+
+    private Double rate;
+
+    private String resAmount;
 }

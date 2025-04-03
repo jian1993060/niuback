@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import cn.jian.stback.bo.UserBO;
 import cn.jian.stback.bo.UserPO;
+import cn.jian.stback.bo.WinType;
 import cn.jian.stback.common.R;
 import cn.jian.stback.entity.User;
 import cn.jian.stback.service.UserService;
@@ -47,6 +48,15 @@ public class UserController {
 		return R.success(getList(user));
 	}
 
+	@RequestMapping("update")
+	public R update(@RequestBody UserBO bo) {
+		User user = new User();
+		user.setId(bo.getId());
+		user.setType(WinType.valueOf(bo.getType()).name());
+		userService.updateById(user);
+		return R.success();
+	}
+
 	public Page<User> getList(UserPO po) {
 		QueryWrapper<User> wrapper = new QueryWrapper<User>();
 		if (StringUtils.isNotBlank(po.getEmail())) {
@@ -54,6 +64,9 @@ public class UserController {
 		}
 		if (StringUtils.isNotBlank(po.getId())) {
 			wrapper.eq("id", po.getId());
+		}
+		if (StringUtils.isNotBlank(po.getType())) {
+			wrapper.eq("type", po.getType());
 		}
 		if (StringUtils.isNotBlank(po.getStatus())) {
 			wrapper.eq("real_status", po.getStatus());

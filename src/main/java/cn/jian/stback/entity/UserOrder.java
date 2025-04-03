@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author jian
- * @since 2025-03-30
+ * @since 2025-04-03
  */
 @Getter
 @Setter
@@ -30,8 +30,6 @@ public class UserOrder implements Serializable {
     private Integer id;
 
     private Integer userId;
-
-    private String code;
 
     private BigDecimal price;
 
@@ -55,7 +53,7 @@ public class UserOrder implements Serializable {
     private String name;
 
     /**
-     * 1 已经成交  2挂单中
+     * 1 已经成交  2挂单中 3已经撤销
      */
     private String status;
 

@@ -45,7 +45,7 @@ public class StockDataController {
 		if (StringUtils.isNotBlank(po.getName())) {
 			wrapper.like("name", po.getName());
 		}
-		wrapper.orderByAsc("status");
+		wrapper.orderByAsc("order_num");
 		Page<StockData> page = new Page<>(po.getCurrent(), 10);
 		page = stockDataService.page(page, wrapper);
 		return page;

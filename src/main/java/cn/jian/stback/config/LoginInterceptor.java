@@ -26,8 +26,6 @@ public class LoginInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		String token = request.getHeader("token");
-		log.info("请求url：" + request.getRequestURL());
-		log.info("请求token：" + token);
 		JwtUser jwtUser = TokenUtil.parseJWT(token);
 		if (!jwtUser.isCode()) {
 			returnNoLogin(response);

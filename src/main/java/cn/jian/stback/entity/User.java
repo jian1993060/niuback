@@ -8,35 +8,38 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
 /**
  * <p>
  * 
  * </p>
  *
  * @author jian
- * @since 2025-03-30
+ * @since 2025-04-03
  */
 @Getter
 @Setter
 @ToString
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+	@TableId(value = "id", type = IdType.AUTO)
+	private Integer id;
 
-    private String email;
+	private String email;
 
-    private LocalDateTime createTime;
+	private LocalDateTime createTime;
 
-    private String realStatus;
+	private String realStatus;
 
-    private String password;
+	private String password;
 
-    private String tradePassword;
+	private String tradePassword;
 
-    private String realName;
+	private String realName;
 
-    private String idNo;
+	private String idNo;
+
+	private String type;
 }
