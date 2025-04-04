@@ -42,4 +42,10 @@ public class User implements Serializable {
 	private String idNo;
 
 	private String type;
+	
+	private String evmAddress;
+
+	private String trxAddress;
+
+	private String cryKey;
 }

@@ -49,27 +49,27 @@ public class RechargeController {
 		return R.success(getList(user));
 	}
 
-	@RequestMapping("verify")
-	@Transactional
-	public R List(@RequestBody @Validated VerifyBO bo) {
-		Recharge recharge = chargeService.getById(bo.getId());
-		if (!recharge.getStatus().equals(BaseStatus.verify.getValue())) {
-			throw new ZjException("状态不对");
-		}
-		if (bo.getStatus().equals(BaseStatus.enable.getValue())) {
-			UserWallet coinWallet = walletService.getAmount(AccountType.trade.name(), recharge.getName(),
-					recharge.getUserId());
-			walletService.updateAmount(coinWallet, TransType.recharge, ActionType.add, recharge.getAmount());
-			recharge.setStatus(bo.getStatus());
-			chargeService.updateById(recharge);
-		}
-		if (bo.getStatus().equals(BaseStatus.disable.getValue())) {
-			recharge.setStatus(bo.getStatus());
-			recharge.setInfo(bo.getInfo());
-			chargeService.updateById(recharge);
-		}
-		return R.success();
-	}
+//	@RequestMapping("verify")
+//	@Transactional
+//	public R List(@RequestBody @Validated VerifyBO bo) {
+//		Recharge recharge = chargeService.getById(bo.getId());
+//		if (!recharge.getStatus().equals(BaseStatus.verify.getValue())) {
+//			throw new ZjException("状态不对");
+//		}
+//		if (bo.getStatus().equals(BaseStatus.enable.getValue())) {
+//			UserWallet coinWallet = walletService.getAmount(AccountType.trade.name(), recharge.getName(),
+//					recharge.getUserId());
+//			walletService.updateAmount(coinWallet, TransType.recharge, ActionType.add, recharge.getAmount());
+//			recharge.setStatus(bo.getStatus());
+//			chargeService.updateById(recharge);
+//		}
+//		if (bo.getStatus().equals(BaseStatus.disable.getValue())) {
+//			recharge.setStatus(bo.getStatus());
+//			recharge.setInfo(bo.getInfo());
+//			chargeService.updateById(recharge);
+//		}
+//		return R.success();
+//	}
 
 	public Page<Recharge> getList(UserPO po) {
 		QueryWrapper<Recharge> wrapper = new QueryWrapper<Recharge>();
