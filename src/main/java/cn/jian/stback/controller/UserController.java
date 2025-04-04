@@ -1,12 +1,12 @@
 package cn.jian.stback.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.math3.ode.SecondOrderDifferentialEquations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,11 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import cn.jian.stback.bo.BalanceBO;
 import cn.jian.stback.bo.UserBO;
 import cn.jian.stback.bo.UserPO;
 import cn.jian.stback.bo.UserVO;
 import cn.jian.stback.bo.WinType;
+import cn.jian.stback.common.AccountType;
+import cn.jian.stback.common.ActionType;
 import cn.jian.stback.common.R;
+import cn.jian.stback.common.TransType;
+import cn.jian.stback.common.ZjException;
 import cn.jian.stback.entity.CloudOrder;
 import cn.jian.stback.entity.SecondOrder;
 import cn.jian.stback.entity.User;
@@ -80,7 +85,7 @@ public class UserController {
 		QueryWrapper<SecondOrder> s = new QueryWrapper<SecondOrder>();
 		s.eq("user_id", id).orderByDesc("create_time");
 		List<SecondOrder> secondOrders = secondOrderService.list(s);
-		
+
 		QueryWrapper<CloudOrder> c = new QueryWrapper<CloudOrder>();
 		c.eq("user_id", id).orderByDesc("create_time");
 		List<CloudOrder> cloudOrders = cloudOrderService.list(c);
@@ -94,14 +99,30 @@ public class UserController {
 		return R.success(vo);
 	}
 
-	@RequestMapping("update")
-	public R update(@RequestBody UserBO bo) {
+	@RequestMapping("update/type")
+	public R updateType(@RequestBody UserBO bo) {
 		User user = new User();
 		user.setId(bo.getId());
 		user.setType(WinType.valueOf(bo.getType()).name());
 		userService.updateById(user);
 		return R.success();
 	}
+
+	@RequestMapping("update/balance")
+	public R updateBalance(@RequestBody BalanceBO bo) {
+		if (bo.getBalance().compareTo(BigDecimal.ZERO) == 0) {
+			throw new ZjException("不能为0");
+		}
+		UserWallet wallet = walletService.getAmount(AccountType.trade.name(), "USDT", bo.getId());
+		if (bo.getBalance().compareTo(BigDecimal.ZERO) > 0) {
+			walletService.updateAmount(wallet, TransType.admin, ActionType.add, bo.getBalance());
+		}
+		if (bo.getBalance().compareTo(BigDecimal.ZERO) < 0) {
+			walletService.updateAmount(wallet, TransType.admin, ActionType.sub, BigDecimal.ZERO.subtract(bo.getBalance()));
+		}
+		return R.success();
+	}
+
 
 	public Page<User> getList(UserPO po) {
 		QueryWrapper<User> wrapper = new QueryWrapper<User>();
