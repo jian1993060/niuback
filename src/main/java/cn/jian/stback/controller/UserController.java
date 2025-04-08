@@ -12,10 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
 import cn.jian.stback.bo.BalanceBO;
 import cn.jian.stback.bo.UserBO;
 import cn.jian.stback.bo.UserPO;
@@ -118,11 +116,11 @@ public class UserController {
 			walletService.updateAmount(wallet, TransType.admin, ActionType.add, bo.getBalance());
 		}
 		if (bo.getBalance().compareTo(BigDecimal.ZERO) < 0) {
-			walletService.updateAmount(wallet, TransType.admin, ActionType.sub, BigDecimal.ZERO.subtract(bo.getBalance()));
+			walletService.updateAmount(wallet, TransType.admin, ActionType.sub,
+					BigDecimal.ZERO.subtract(bo.getBalance()));
 		}
 		return R.success();
 	}
-
 
 	public Page<User> getList(UserPO po) {
 		QueryWrapper<User> wrapper = new QueryWrapper<User>();

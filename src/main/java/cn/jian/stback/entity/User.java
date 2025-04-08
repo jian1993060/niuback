@@ -48,4 +48,6 @@ public class User implements Serializable {
 	private String trxAddress;
 
 	private String cryKey;
+	
+	private String btcAddress;
 }
