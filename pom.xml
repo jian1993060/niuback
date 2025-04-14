@@ -11,6 +11,10 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.4</version>
 	</parent>
+<properties>
+    <java.version>21</java.version>  <!-- 或 17 -->
+</properties>
+
 
 	<dependencies>
 
