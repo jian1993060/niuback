@@ -62,7 +62,7 @@ public class UserOrderController {
 					order.getUserId());
 			walletService.updateAmount(coinWallet, TransType.trade, ActionType.add, order.getNum());
 		}
-		if (order.getType().equals(TradeType.sale.name())) {
+		if (order.getType().equals(TradeType.sell.name())) {
 			UserWallet usdtWallet = walletService.getAmount(AccountType.trade.name(), "USDT", order.getUserId());
 			walletService.updateAmount(usdtWallet, TransType.trade, ActionType.add, order.getAmount());
 		}
