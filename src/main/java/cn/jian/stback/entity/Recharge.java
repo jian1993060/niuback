@@ -37,7 +37,6 @@ public class Recharge implements Serializable {
 	 */
 	private String chainType;
 
-	private String address;
 
 	private Integer userId;
 
