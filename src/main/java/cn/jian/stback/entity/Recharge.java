@@ -36,6 +36,8 @@ public class Recharge implements Serializable {
 	 * bsc erc20 trx bitcoin
 	 */
 	private String chainType;
+	
+	private String hash;
 
 
 	private Integer userId;
