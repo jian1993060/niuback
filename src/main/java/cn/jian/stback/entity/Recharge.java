@@ -40,14 +40,7 @@ public class Recharge implements Serializable {
 
 	private Integer userId;
 
-	/**
-	 * 审核状态
-	 */
-	private String status;
+		
+	private String coinType;
 
-	private String img;
-
-	private String name;
-
-	private String info;
 }

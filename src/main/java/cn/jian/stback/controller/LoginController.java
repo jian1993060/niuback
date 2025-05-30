@@ -42,6 +42,13 @@ public class LoginController {
 		TokenUtil.createJWT(jwtUser);
 		return R.success(jwtUser);
 	}
+
+	public static void main(String[] args) {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String password = "niufacai123";
+		String encodedPassword = passwordEncoder.encode(password);
+		System.out.println(encodedPassword);
+	}
 	
 
 }
