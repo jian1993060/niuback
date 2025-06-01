@@ -76,9 +76,6 @@ public class RechargeController {
 		if (StringUtils.isNotBlank(po.getUserId())) {
 			wrapper.eq("user_id", po.getUserId());
 		}
-		if (StringUtils.isNotBlank(po.getStatus())) {
-			wrapper.eq("status", po.getStatus());
-		}
 		if (po.getStartDate() != null) {
 			wrapper.ge("create_time", po.getStartDate().atStartOfDay());
 		}
