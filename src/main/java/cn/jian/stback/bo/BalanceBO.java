@@ -12,4 +12,7 @@ public class BalanceBO {
 
 	@NotNull
 	BigDecimal balance;
+
+	@NotNull
+	String type;
 }

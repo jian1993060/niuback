@@ -113,10 +113,10 @@ public class UserController {
 		}
 		UserWallet wallet = walletService.getAmount(AccountType.trade.name(), "USDT", bo.getId());
 		if (bo.getBalance().compareTo(BigDecimal.ZERO) > 0) {
-			walletService.updateAmount(wallet, TransType.admin, ActionType.add, bo.getBalance());
+			walletService.updateAmount(wallet, TransType.valueOf(bo.getType()), ActionType.add, bo.getBalance());
 		}
 		if (bo.getBalance().compareTo(BigDecimal.ZERO) < 0) {
-			walletService.updateAmount(wallet, TransType.admin, ActionType.sub,
+			walletService.updateAmount(wallet, TransType.valueOf(bo.getType()), ActionType.sub,
 					BigDecimal.ZERO.subtract(bo.getBalance()));
 		}
 		return R.success();

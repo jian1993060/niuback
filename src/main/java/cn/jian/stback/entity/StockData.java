@@ -30,5 +30,7 @@ public class StockData implements Serializable {
 
     private String status;
 
+    private String logo;
+
     private Integer orderNum;
 }

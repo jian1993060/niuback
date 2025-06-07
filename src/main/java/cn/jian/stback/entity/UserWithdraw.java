@@ -24,26 +24,28 @@ import java.time.LocalDateTime;
 @TableName("user_withdraw")
 public class UserWithdraw implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+	@TableId(value = "id", type = IdType.AUTO)
+	private Integer id;
 
-    private LocalDateTime createTime;
+	private LocalDateTime createTime;
 
-    private Integer userId;
+	private Integer userId;
 
-    private BigDecimal amount;
+	private BigDecimal amount;
 
-    private String status;
+	private String status;
 
-    private String address;
+	private String address;
 
-    private LocalDateTime updateTime;
+	private String coinType;
 
-    private String refuseInfo;
+	private String chainType;
 
-    private String transStatus;
+	private String refuseInfo;
 
-    private String hash;
+	private String transStatus;
+
+	private String hash;
 }
