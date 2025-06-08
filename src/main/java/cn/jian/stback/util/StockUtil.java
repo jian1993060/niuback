@@ -18,9 +18,9 @@ import cn.jian.stback.bo.StockApiReq;
  */
 public class StockUtil {
 
-	public static String token = "adf8070c9d2b729d2a660c50ccc0579d-c-app";
+	public static String token = "1b7c491d80c33e3f26e635745b6a630f-c-app";
 
-	public static String ALLTICK_URL = "https://quote.alltick.io/v2/quote-stock-b-api";
+	public static String ALLTICK_URL = "https://quote.alltick.io/quote-b-api";
 
 	public static boolean getNewPrice(String code) throws Exception {
 		List<String> newCodes = new ArrayList<>();
@@ -28,6 +28,7 @@ public class StockUtil {
 		String url = ALLTICK_URL + "/trade-tick?" + "token=" + token + "&query=";
 		String str = getCodeParams(newCodes);
 		String resp = OkHttpUtil.sendGet(url + str);
+		System.out.println(resp);
 		JSONObject j = JSON.parseObject(resp);
 		String data = j.getString("data");
 		return data != null;
