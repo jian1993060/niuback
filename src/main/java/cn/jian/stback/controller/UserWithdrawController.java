@@ -6,26 +6,23 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.web3j.crypto.ECKeyPair;
-import org.web3j.crypto.Keys;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import cn.jian.stback.bo.ShPO;
 import cn.jian.stback.bo.UserPO;
+import cn.jian.stback.common.AccountType;
+import cn.jian.stback.common.ActionType;
+import cn.jian.stback.common.BaseStatus;
 import cn.jian.stback.common.R;
+import cn.jian.stback.common.TransType;
 import cn.jian.stback.common.ZjException;
-import cn.jian.stback.config.MerchantDataUtil;
-import cn.jian.stback.entity.Recharge;
-import cn.jian.stback.entity.User;
-import cn.jian.stback.entity.UserReal;
 import cn.jian.stback.entity.UserWallet;
 import cn.jian.stback.entity.UserWithdraw;
-import cn.jian.stback.service.RechargeService;
+import cn.jian.stback.service.UserService;
 import cn.jian.stback.service.UserWalletService;
 import cn.jian.stback.service.UserWithdrawService;
-import cn.jian.stback.util.AccountUtil;
 
 /**
  * <p>
@@ -40,11 +37,13 @@ import cn.jian.stback.util.AccountUtil;
 public class UserWithdrawController {
 
 	@Autowired
-	UserWalletService UserWalletService;
+	UserWalletService walletService;
 	
 	@Autowired
 	UserWithdrawService withdrawService;
-
+	
+	@Autowired
+	UserService userService;
 
 	@RequestMapping("list")
 	public R List(@RequestBody UserPO user) {
@@ -74,39 +73,29 @@ public class UserWithdrawController {
 		return page;
 	}
 	
-//	@RequestMapping("finish")
-//	@Transactional
-//	public R finish(@RequestBody ShPO po) throws Exception {
-//		UserReal real = realService.getById(po.getId());
-//		if (!real.getStatus().equals("3")) {
-//			throw new ZjException("该订单已经完成");
-//		}
-//		if (po.getStatus().equals("1")) {
-//			User user = userService.getById(real.getUserId());
-//			user.setRealStatus("1");
-//			userService.updateById(user);
-//			UserWallet wallet = userWalletService.getById(real.getUserId());
-//			wallet.setIdNo(real.getIdNo());
-//			wallet.setName(real.getName());
-//			ECKeyPair ecKeyPair = Keys.createEcKeyPair();// 调用Keys的静态方法创建密钥对
-//			String privateKey = "0x" + ecKeyPair.getPrivateKey().toString(16);// 获取私钥
-//			String address = Keys.getAddress(ecKeyPair.getPublicKey().toString(16));// 获取地址值
-//			wallet.setPrivateKey(AccountUtil.encode(privateKey));
-//			wallet.setAddress("0x" + address);
-//			userWalletService.updateById(wallet);
-//			real.setStatus(po.getStatus());
-//			realService.updateById(real);
-//			MerchantDataUtil.wallets.put(wallet.getAddress(), wallet);
-//		}
-//		if (po.getStatus().equals("2")) {
-//			if (StringUtils.isBlank(po.getInfo())) {
-//				throw new ZjException("驳回理由必填");
-//			}
-//			real.setRefuseInfo(po.getInfo());
-//			real.setStatus(po.getStatus());
-//			realService.updateById(real);
-//		}
-//		return R.success();
-//	}
+	@RequestMapping("finish")
+	@Transactional
+	public R finish(@RequestBody ShPO po) throws Exception {
+		UserWithdraw withdraw = withdrawService.getById(po.getId());
+		if (!withdraw.getStatus().equals(BaseStatus.verify.getValue())) {
+			throw new ZjException("该订单已经完成");
+		}
+		if (po.getStatus().equals(BaseStatus.enable.getValue())) {
+			withdraw.setStatus(BaseStatus.enable.getValue());
+			withdrawService.updateById(withdraw);
+		}
+		if (po.getStatus().equals(BaseStatus.disable.getValue())) {
+			if (StringUtils.isBlank(po.getInfo())) {
+				throw new ZjException("驳回理由必填");
+			}
+			withdraw.setRefuseInfo(po.getInfo());
+			withdraw.setStatus(po.getStatus());
+			UserWallet wallet = walletService.getAmount(AccountType.trade.name(), withdraw.getCoinType(),
+					withdraw.getUserId());
+			walletService.updateAmount(wallet, TransType.withdrawal, ActionType.add, withdraw.getAmount());  
+			withdrawService.updateById(withdraw);
+		}
+		return R.success();
+	}
 
 }
