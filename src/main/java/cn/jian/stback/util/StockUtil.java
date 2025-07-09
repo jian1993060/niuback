@@ -22,10 +22,17 @@ public class StockUtil {
 
 	public static String ALLTICK_URL = "https://quote.alltick.io/quote-b-api";
 
-	public static boolean getNewPrice(String code) throws Exception {
+	public static String ALLTICK_STOCK_URL = "https://quote.alltick.io/quote-stock-b-api";
+
+	public static boolean getNewPrice(String code, String type) throws Exception {
 		List<String> newCodes = new ArrayList<>();
 		newCodes.add(code);
-		String url = ALLTICK_URL + "/trade-tick?" + "token=" + token + "&query=";
+		String url = "";
+		if (type.equals("stock")) {
+			url = ALLTICK_STOCK_URL + "/trade-tick?" + "token=" + token + "&query=";
+		} else {
+			url = ALLTICK_URL + "/trade-tick?" + "token=" + token + "&query=";
+		}
 		String str = getCodeParams(newCodes);
 		String resp = OkHttpUtil.sendGet(url + str);
 		System.out.println(resp);

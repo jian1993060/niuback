@@ -1,8 +1,14 @@
 package cn.jian.stback.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,9 +19,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import cn.jian.stback.bo.StockBO;
 import cn.jian.stback.bo.UserPO;
+import cn.jian.stback.common.AccountType;
 import cn.jian.stback.common.R;
 import cn.jian.stback.entity.StockData;
+import cn.jian.stback.entity.User;
+import cn.jian.stback.entity.UserWallet;
 import cn.jian.stback.service.StockDataService;
+import cn.jian.stback.service.UserService;
+import cn.jian.stback.service.UserWalletService;
 import cn.jian.stback.util.OkHttpUtil;
 import cn.jian.stback.util.StockUtil;
 
@@ -34,6 +45,12 @@ public class StockDataController {
 	@Autowired
 	StockDataService stockDataService;
 
+	@Autowired
+	UserWalletService walletService;
+
+	@Autowired
+	UserService userService;
+
 	@RequestMapping("list")
 	public R List(@RequestBody UserPO user) {
 		return R.success(getList(user));
@@ -41,18 +58,18 @@ public class StockDataController {
 
 	@RequestMapping("create")
 	public R create(@RequestBody @Validated StockBO bo) throws Exception {
-		String code = bo.getName() + "USDT";
+		String code = bo.getCode();
 		StockData data = stockDataService.getById(code);
 		if (data != null) {
 			return R.error("该股票已经存在");
 		}
-		if (!StockUtil.getNewPrice(code)) {
+		if (!StockUtil.getNewPrice(code, bo.getType())) {
 			return R.error("该股票不存在或者延迟，请再次确认");
 		}
 		data = new StockData();
 		data.setName(bo.getName());
 		data.setId(code);
-		data.setType("crypt");
+		data.setType(bo.getType());
 		data.setStatus("1");
 		data.setOrderNum(6);
 		data.setLogo(bo.getLogo());
@@ -61,6 +78,29 @@ public class StockDataController {
 			return R.error("未知错误");
 		}
 		stockDataService.save(data);
+		return R.success();
+	}
+
+	@RequestMapping("refresh/{id}")
+	@Transactional
+	public R refresh(@PathVariable String id) throws Exception {
+		QueryWrapper<UserWallet> q = new QueryWrapper<UserWallet>();
+		q.eq("code", id);
+		walletService.remove(q);
+		StockData stock = stockDataService.getById(id);
+		List<UserWallet> wallets = new ArrayList<>();
+		List<User> users = userService.list();
+		for (User user : users) {
+			UserWallet userWalletTrade = new UserWallet();
+			userWalletTrade.setAmount(BigDecimal.ZERO);
+			userWalletTrade.setUserId(user.getId());
+			userWalletTrade.setCode(stock.getId());
+			userWalletTrade.setName(stock.getName());
+			userWalletTrade.setVersion(1);
+			userWalletTrade.setType(AccountType.trade.name());
+			wallets.add(userWalletTrade);
+		}
+		walletService.saveOrUpdateBatch(wallets);
 		return R.success();
 	}
 

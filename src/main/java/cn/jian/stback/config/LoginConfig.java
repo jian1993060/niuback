@@ -11,6 +11,7 @@ public class LoginConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new LoginInterceptor()).excludePathPatterns(
 				"/login",
+				"/stock/refresh/**",
 				"/file/upload"
 				);
 	}

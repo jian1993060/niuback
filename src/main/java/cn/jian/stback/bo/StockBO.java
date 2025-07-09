@@ -8,8 +8,14 @@ public class StockBO {
 
 	@NotEmpty
 	String name;
+	
+	@NotEmpty
+	String code;
 
 	@NotEmpty
 	String logo;
+	
+	@NotEmpty
+	String type;
 
 }
